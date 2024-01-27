@@ -18,12 +18,45 @@
   <form class="mb-3">
     <div class="mb-3">
       <label class="form-label">Nama Siswa</label>
-      <input type="text" class="form-control">
+      <input type="text" class="form-control" id= "namasiswa">
     </div>
     <button type="submit" class="btn btn-primary">Simpan</button>
   </form>
   
   <a href="siswa.html" class="mt-1">Lihat Daftar Siswa</a>
+  
+    <script type="module">
+    import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.4.0/firebase-app.js';
+    import { konfigurasiFirebase } from '/Datasiswa/main.js';
+    import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/10.4.0/firebase-firestore.js";
+    import { getStorage, ref, uploadBytes } from "https://www.gstatic.com/firebasejs/10.4.0/firebase-storage.js";
+
+
+    const app = initializeApp(konfigurasiFirebase);
+    const db = getFirestore(app);
+
+    $(document).ready(function() {
+      let namaSiswa = $("#namasiswa");
+      
+
+      $("#tmblsimpan").click(async function(event) {
+        event.preventDefault();
+        
+        
+        try {
+          const barangRef = await addDoc(collection(db, "siswa"), {
+            nama: namaSiswa.val(),
+        
+          });
+  
+
+          $("#pesan").html("Berhasil menambah data siswa " + namaSiswa.val());
+        } catch (err) {
+          $("#pesan").html("Gagal menambah barang " + namaSiswa.val() + err);
+        }
+      });
+    });
+  </script>
 </body>
 
 </html>
