@@ -1,25 +1,28 @@
-
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.2/firebase-app.js";
 import {
   getFirestore,
   collection,
   addDoc,
   getDocs,
+  getDoc,
   deleteDoc,
   doc,
   query,
-  orderBy
+  orderBy,
+  updateDoc
 } from "https://www.gstatic.com/firebasejs/10.7.2/firebase-firestore.js";
 
-const firebaseConfig = {
-apiKey: "AIzaSyCDE9RCp2gUIyOG8hUEv5un0JlXqHWowkA",
-  authDomain: "crud-6df8e.firebaseapp.com",
-  projectId: "crud-6df8e",
-  storageBucket: "crud-6df8e.appspot.com",
-  messagingSenderId: "22846946310",
-  appId: "1:22846946310:web:f393dbd1ff1ad9d61f1787"
-};
 
+const firebaseConfig = {
+  apiKey: "AIzaSyCjXlgysJkN-2s3Gu0forgp7as5-9NqCkI",
+  authDomain: "pasar-b04a7.firebaseapp.com",
+  databaseURL: "https://pasar-b04a7-default-rtdb.firebaseio.com",
+  projectId: "pasar-b04a7",
+  storageBucket: "pasar-b04a7.appspot.com",
+  messagingSenderId: "508470916587",
+  appId: "1:508470916587:web:460e9a1612e92b712e15ae",
+  measurementId: "G-33T7CQCWBX"
+};
 
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
@@ -35,4 +38,30 @@ export async function ambilDaftarSiswa () {
   });
   
   return retval;
+}
+
+export async function tambahSiswa(val) {
+  try {
+    const docRef = await addDoc(collection(db, "siswa"), {
+      nama: val
+    });
+    console.log('Berhasil menyimpan dokumen dengan ID: ' + docRef.id);
+  } catch (e) {
+    console.log('Error menambah dokumen: ' + e);
+  }
+}
+
+export async function hapusSiswa(docId) {
+  await deleteDoc(doc(db, "siswa", docId));
+}
+
+export async function ubahSiswa(docId, val) {
+  await updateDoc(doc(db, "siswa", docId), { nama: val });
+}
+
+export async function ambilSiswa(docId) {
+  const docRef = await doc(db, "siswa", docId);
+  const docSnap = await getDoc(docRef);
+  
+  return await docSnap.data();
 }
